@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 import "./Navbar.css";
 import NavItems from "./NavItems";
 
-const Navbar = ({ user }) => {
+const Navbar = ({ user, cartCount }) => {
   return (
     <nav className="align-center navbar">
       <div className="align-center">
@@ -29,7 +29,7 @@ const Navbar = ({ user }) => {
           <>
             <NavItems title="My Orders" link="/myorders" />
             <NavLink to="/cart" className="align-center">
-              Cart <p className="align-center cart-counts">0</p>
+              Cart <p className="align-center cart-counts">{cartCount}</p>
             </NavLink>
             <NavItems title="Logout" link="/logout" />
           </>

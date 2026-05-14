@@ -6,7 +6,7 @@ import QuantityInput from "../Common/QuantityInput";
 import useData from "../../hooks/useData";
 import Loader from "../Common/Loader";
 
-const SingleProduct = () => {
+const SingleProduct = ({ addToCart }) => {
   const { id } = useParams();
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -48,7 +48,12 @@ const SingleProduct = () => {
                 stock={product.stock}
               />
             </div>
-            <button className="search-button add-cart">Add to Cart</button>
+            <button
+              className="search-button add-cart"
+              onClick={() => addToCart(product, quantity)}
+            >
+              Add to Cart
+            </button>
           </div>
         </>
       )}
