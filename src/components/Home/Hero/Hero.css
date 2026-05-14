@@ -1,0 +1,48 @@
+.hero-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 550px;
+  padding: 0 60px;
+  background-color: black;
+  color: white;
+}
+
+.hero-section div {
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.hero-section .title {
+  font-size: 45px;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.hero-section .subtitle {
+  font-size: 24px;
+  margin-bottom: 32px;
+  width: 70%;
+}
+
+.hero-section .link {
+  padding: 16px 22px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  border: 2px solid #fff;
+  border-radius: 24px;
+  background-color: white;
+  color: black;
+  transition: all 0.2s ease-in-out;
+}
+
+.hero-section .link:hover {
+  background-color: transparent;
+  color: white;
+}
+
+.hero-section img {
+  height: 500px;
+  transition: all 0.3s ease-in-out;
+}
