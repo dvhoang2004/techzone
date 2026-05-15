@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 
 import "./Cart.css";
-import user from "../../assets/user.webp";
 import remove from "../../assets/remove.png";
 import Table from "../Common/Table";
 import QuantityInput from "../Common/QuantityInput";
+import UserContext from "../../contexts/UserContext";
+import CartContext from "../../contexts/CartContext";
 
-const Cart = ({ cart }) => {
+const Cart = () => {
   const [subTotal, setSubTotal] = useState(0);
+  const user = useContext(UserContext);
+  const { cart, addToCart } = useContext(CartContext);
 
   //change in cart will trigger recalculation of subtotal amount
   useEffect(() => {
@@ -21,10 +24,13 @@ const Cart = ({ cart }) => {
   return (
     <section className="align-center cart-page">
       <div className="align-center user-info">
-        <img src={user} alt="user profile" />
+        <img
+          src={`http://localhost:5000/profile/${user?.user?.profilePic}`}
+          alt="user profile"
+        />
         <div>
-          <p className="user-name">Hoang</p>
-          <p className="user-email">hoangmail@gmail.com</p>
+          <p className="user-name">User name: {user?.user?.name}</p>
+          <p className="user-email">Email: {user?.user?.email}</p>
         </div>
       </div>
 

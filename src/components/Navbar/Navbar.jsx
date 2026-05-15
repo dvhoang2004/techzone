@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
 
 import "./Navbar.css";
 import NavItems from "./NavItems";
+import UserContext from "../../contexts/UserContext";
+import CartContext from "../../contexts/CartContext";
 
-const Navbar = ({ user, cartCount }) => {
+const Navbar = () => {
+  const user = useContext(UserContext);
+  const { cart } = useContext(CartContext);
+
   return (
     <nav className="align-center navbar">
       <div className="align-center">
@@ -29,7 +34,7 @@ const Navbar = ({ user, cartCount }) => {
           <>
             <NavItems title="My Orders" link="/myorders" />
             <NavLink to="/cart" className="align-center">
-              Cart <p className="align-center cart-counts">{cartCount}</p>
+              Cart <p className="align-center cart-counts">{cart.length}</p>
             </NavLink>
             <NavItems title="Logout" link="/logout" />
           </>

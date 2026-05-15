@@ -1,16 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 
 import "./SingleProduct.css";
 import QuantityInput from "../Common/QuantityInput";
 import useData from "../../hooks/useData";
 import Loader from "../Common/Loader";
+import CartContext from "../../contexts/CartContext";
 
-const SingleProduct = ({ addToCart }) => {
+const SingleProduct = () => {
   const { id } = useParams();
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const { data: product, error, isLoading } = useData(`/products/${id}`);
+  const { addToCart } = useContext(CartContext);
 
   return (
     <section className="align-center single-product">

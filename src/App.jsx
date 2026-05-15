@@ -5,9 +5,11 @@ import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar from "./components/Navbar/Navbar";
 import Routing from "./components/Routing/Routing";
-import { getJwt, getUser } from "./services/userServices";
 import setAuthToken from "./utils/setAuthToken";
+import { getJwt, getUser } from "./services/userServices";
 import { addToCartAPI, getCartAPI } from "./services/cartServices";
+import UserContext from "./contexts/UserContext";
+import CartContext from "./contexts/CartContext";
 
 setAuthToken(getJwt());
 
@@ -67,13 +69,17 @@ const App = () => {
   }, [user]);
 
   return (
-    <div className="app">
-      <Navbar user={user} cartCount={cart.length} />
-      <main>
-        <ToastContainer position="top-center" />
-        <Routing addToCart={addToCart} cart={cart} />
-      </main>
-    </div>
+    <UserContext.Provider value={{ user }}>
+      <CartContext.Provider value={{ cart, addToCart: addToCart }}>
+        <div className="app">
+          <Navbar />
+          <main>
+            <ToastContainer position="top-center" />
+            <Routing />
+          </main>
+        </div>
+      </CartContext.Provider>
+    </UserContext.Provider>
   );
 };
 
