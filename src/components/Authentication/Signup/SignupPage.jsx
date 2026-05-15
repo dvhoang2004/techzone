@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Navigate } from "react-router-dom";
 
 import "./SignupPage.css";
 import user from "../../../assets/user.webp";
-import { signup } from "../../../services/userServices";
+import { signup, getUser } from "../../../services/userServices";
 
 const schema = z
   .object({
@@ -52,6 +53,9 @@ const SignupPage = () => {
       }
     }
   };
+  if (getUser()) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <section className="align-center form-page">

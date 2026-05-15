@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Navigate, useLocation } from "react-router-dom";
 
 import "./LoginPage.css";
-import { login } from "../../../services/userServices";
+import { getUser, login } from "../../../services/userServices";
 
 const schema = z.object({
   email: z.string().email({ message: "Invalid email!" }).min(3),
@@ -20,17 +21,25 @@ const LoginPage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: zodResolver(schema) });
+  const location = useLocation();
 
   const onSubmit = async (formData) => {
     try {
       await login(formData);
-      window.location = "/";
+
+      const { state } = location;
+
+      window.location = state ? state.from : "/";
     } catch (error) {
       if (error.response && error.response.status === 400) {
         setFormError(error.response.data.message);
       }
     }
   };
+
+  if (getUser()) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <section className="align-center form-page">
