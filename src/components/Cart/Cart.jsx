@@ -10,7 +10,7 @@ import CartContext from "../../contexts/CartContext";
 const Cart = () => {
   const [subTotal, setSubTotal] = useState(0);
   const user = useContext(UserContext);
-  const { cart, addToCart } = useContext(CartContext);
+  const { cart, removeFromCart } = useContext(CartContext);
 
   //change in cart will trigger recalculation of subtotal amount
   useEffect(() => {
@@ -49,6 +49,7 @@ const Cart = () => {
                   src={remove}
                   alt="remove icon"
                   className="cart-remove-icon"
+                  onClick={() => removeFromCart(product._id)}
                 />
               </td>
             </tr>

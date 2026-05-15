@@ -7,7 +7,11 @@ import Navbar from "./components/Navbar/Navbar";
 import Routing from "./components/Routing/Routing";
 import setAuthToken from "./utils/setAuthToken";
 import { getJwt, getUser } from "./services/userServices";
-import { addToCartAPI, getCartAPI } from "./services/cartServices";
+import {
+  addToCartAPI,
+  getCartAPI,
+  removeFromCartAPI,
+} from "./services/cartServices";
 import UserContext from "./contexts/UserContext";
 import CartContext from "./contexts/CartContext";
 
@@ -52,6 +56,21 @@ const App = () => {
       });
   };
 
+  const removeFromCart = (productId) => {
+    const oldCart = [...cart];
+    const newCart = oldCart.filter((item) => item.product._id !== productId);
+    setCart(newCart);
+
+    removeFromCartAPI(productId)
+      .then(() => {
+        toast.success("Product removed from cart!");
+      })
+      .catch((err) => {
+        toast.error("Failed to remove product from cart. Please try again.");
+        setCart(oldCart); //if error occurs revert back to previous cart state
+      });
+  };
+
   const getCart = () => {
     getCartAPI()
       .then((res) => {
@@ -70,7 +89,9 @@ const App = () => {
 
   return (
     <UserContext.Provider value={{ user }}>
-      <CartContext.Provider value={{ cart, addToCart: addToCart }}>
+      <CartContext.Provider
+        value={{ cart, addToCart: addToCart, removeFromCart: removeFromCart }}
+      >
         <div className="app">
           <Navbar />
           <main>
