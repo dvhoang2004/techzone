@@ -6,6 +6,7 @@ import QuantityInput from "../Common/QuantityInput";
 import useData from "../../hooks/useData";
 import Loader from "../Common/Loader";
 import CartContext from "../../contexts/CartContext";
+import UserContext from "../../contexts/UserContext";
 
 const SingleProduct = () => {
   const { id } = useParams();
@@ -13,6 +14,7 @@ const SingleProduct = () => {
   const [quantity, setQuantity] = useState(1);
   const { data: product, error, isLoading } = useData(`/products/${id}`);
   const { addToCart } = useContext(CartContext);
+  const { user } = useContext(UserContext);
 
   return (
     <section className="align-center single-product">
@@ -42,20 +44,24 @@ const SingleProduct = () => {
             <h1 className="single-product-title">{product.title}</h1>
             <p className="single-product-description">{product.description}</p>
             <p className="single-product-price">${product.price.toFixed(2)}</p>
-            <h2 className="quanity-title">Quantity:</h2>
-            <div className="align-center quantity-input">
-              <QuantityInput
-                quantity={quantity}
-                setQuantity={setQuantity}
-                stock={product.stock}
-              />
-            </div>
-            <button
-              className="search-button add-cart"
-              onClick={() => addToCart(product, quantity)}
-            >
-              Add to Cart
-            </button>
+            {user && (
+              <>
+                <h2 className="quanity-title">Quantity:</h2>
+                <div className="align-center quantity-input">
+                  <QuantityInput
+                    quantity={quantity}
+                    setQuantity={setQuantity}
+                    stock={product.stock}
+                  />
+                </div>
+                <button
+                  className="search-button add-cart"
+                  onClick={() => addToCart(product, quantity)}
+                >
+                  Add to Cart
+                </button>
+              </>
+            )}
           </div>
         </>
       )}
