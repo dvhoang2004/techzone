@@ -11,3 +11,11 @@ export function getCartAPI() {
 export function removeFromCartAPI(productId) {
   return apiClient.patch(`/cart/remove/${productId}`);
 }
+
+export function increaseProductAPI(productId) {
+  return apiClient.patch(`/cart/increase/${productId}`);
+}
+
+export function decreaseProductAPI(productId) {
+  return apiClient.patch(`/cart/decrease/${productId}`);
+}

@@ -11,6 +11,8 @@ import {
   addToCartAPI,
   getCartAPI,
   removeFromCartAPI,
+  increaseProductAPI,
+  decreaseProductAPI,
 } from "./services/cartServices";
 import UserContext from "./contexts/UserContext";
 import CartContext from "./contexts/CartContext";
@@ -71,6 +73,29 @@ const App = () => {
       });
   };
 
+  const updateCart = (type, productId) => {
+    const oldCart = [...cart];
+    const updatedCart = [...cart];
+    const productIndex = updatedCart.findIndex(
+      (item) => item.product._id === productId,
+    );
+    if (type === "increase") {
+      updatedCart[productIndex].quantity += 1;
+      setCart(updatedCart);
+      increaseProductAPI(productId).catch((err) => {
+        toast.error("Failed to increase product quantity. Please try again.");
+        setCart(oldCart); //if error occurs revert back to previous cart state
+      });
+    } else if (type === "decrease") {
+      updatedCart[productIndex].quantity -= 1;
+      setCart(updatedCart);
+      decreaseProductAPI(productId).catch((err) => {
+        toast.error("Failed to decrease product quantity. Please try again.");
+        setCart(oldCart); //if error occurs revert back to previous cart state
+      });
+    }
+  };
+
   const getCart = () => {
     getCartAPI()
       .then((res) => {
@@ -90,7 +115,7 @@ const App = () => {
   return (
     <UserContext.Provider value={{ user }}>
       <CartContext.Provider
-        value={{ cart, addToCart: addToCart, removeFromCart: removeFromCart }}
+        value={{ cart, addToCart: addToCart, removeFromCart, updateCart }}
       >
         <div className="app">
           <Navbar />

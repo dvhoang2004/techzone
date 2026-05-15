@@ -10,7 +10,7 @@ import CartContext from "../../contexts/CartContext";
 const Cart = () => {
   const [subTotal, setSubTotal] = useState(0);
   const user = useContext(UserContext);
-  const { cart, removeFromCart } = useContext(CartContext);
+  const { cart, removeFromCart, updateCart } = useContext(CartContext);
 
   //change in cart will trigger recalculation of subtotal amount
   useEffect(() => {
@@ -41,7 +41,13 @@ const Cart = () => {
               <td>{product.title}</td>
               <td>${product.price.toFixed(2)}</td>
               <td className="align-center table-quantity-input">
-                <QuantityInput quantity={quantity} stock={product.stock} />
+                <QuantityInput
+                  quantity={quantity}
+                  stock={product.stock}
+                  setQuantity={updateCart}
+                  cartPage={true}
+                  productId={product._id}
+                />
               </td>
               <td>${(product.price * quantity).toFixed(2)}</td>
               <td>

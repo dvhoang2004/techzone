@@ -24,13 +24,13 @@ const Navbar = () => {
       <div className="align-center nav-links">
         <NavItems title="Home" link="/" />
         <NavItems title="Products" link="/products" />
-        {!user && (
+        {!user.user && (
           <>
             <NavItems title="LogIn" link="/login" />
             <NavItems title="SignUp" link="/signup" />
           </>
         )}
-        {user && (
+        {user.user && (
           <>
             <NavItems title="My Orders" link="/myorders" />
             <NavLink to="/cart" className="align-center">
