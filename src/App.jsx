@@ -115,7 +115,13 @@ const App = () => {
   return (
     <UserContext.Provider value={{ user }}>
       <CartContext.Provider
-        value={{ cart, addToCart: addToCart, removeFromCart, updateCart }}
+        value={{
+          cart,
+          addToCart: addToCart,
+          removeFromCart,
+          updateCart,
+          setCart,
+        }}
       >
         <div className="app">
           <Navbar />

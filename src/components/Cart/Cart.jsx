@@ -6,11 +6,14 @@ import Table from "../Common/Table";
 import QuantityInput from "../Common/QuantityInput";
 import UserContext from "../../contexts/UserContext";
 import CartContext from "../../contexts/CartContext";
+import { checkoutAPI } from "../../services/orderServices";
+import { toast } from "react-toastify";
+import { set } from "zod";
 
 const Cart = () => {
   const [subTotal, setSubTotal] = useState(0);
   const user = useContext(UserContext);
-  const { cart, removeFromCart, updateCart } = useContext(CartContext);
+  const { cart, removeFromCart, updateCart, setCart } = useContext(CartContext);
 
   //change in cart will trigger recalculation of subtotal amount
   useEffect(() => {
@@ -20,6 +23,19 @@ const Cart = () => {
     });
     setSubTotal(total);
   }, [cart]);
+
+  const checkout = () => {
+    const oldCart = [...cart];
+    setCart([]); //clear cart after successful checkout
+    checkoutAPI()
+      .then(() => {
+        toast.success("Order placed successfully!");
+      })
+      .catch(() => {
+        toast.error("Failed to place order. Please try again.");
+        setCart(oldCart); //if error occurs revert back to previous cart state
+      });
+  };
 
   return (
     <section className="align-center cart-page">
@@ -79,7 +95,9 @@ const Cart = () => {
           </tr>
         </tbody>
       </table>
-      <button className="search-button checkout-button">Checkout</button>
+      <button className="search-button checkout-button" onClick={checkout}>
+        Checkout
+      </button>
     </section>
   );
 };
