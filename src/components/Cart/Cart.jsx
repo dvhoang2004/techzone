@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import "./Cart.css";
 import user from "../../assets/user.webp";
@@ -6,7 +6,18 @@ import remove from "../../assets/remove.png";
 import Table from "../Common/Table";
 import QuantityInput from "../Common/QuantityInput";
 
-const Cart = () => {
+const Cart = ({ cart }) => {
+  const [subTotal, setSubTotal] = useState(0);
+
+  //change in cart will trigger recalculation of subtotal amount
+  useEffect(() => {
+    let total = 0;
+    cart.forEach((item) => {
+      total += item.product.price * item.quantity;
+    });
+    setSubTotal(total);
+  }, [cart]);
+
   return (
     <section className="align-center cart-page">
       <div className="align-center user-info">
@@ -19,21 +30,23 @@ const Cart = () => {
 
       <Table headings={["Item", "Price", "Quantity", "Total", "Remove"]}>
         <tbody>
-          <tr>
-            <td>iPhone 17</td>
-            <td>$999</td>
-            <td className="align-center table-quantity-input">
-              <QuantityInput />
-            </td>
-            <td>$999</td>
-            <td>
-              <img
-                src={remove}
-                alt="remove icon"
-                className="cart-remove-icon"
-              />
-            </td>
-          </tr>
+          {cart.map(({ product, quantity }) => (
+            <tr key={product._id}>
+              <td>{product.title}</td>
+              <td>${product.price.toFixed(2)}</td>
+              <td className="align-center table-quantity-input">
+                <QuantityInput quantity={quantity} stock={product.stock} />
+              </td>
+              <td>${(product.price * quantity).toFixed(2)}</td>
+              <td>
+                <img
+                  src={remove}
+                  alt="remove icon"
+                  className="cart-remove-icon"
+                />
+              </td>
+            </tr>
+          ))}
         </tbody>
       </Table>
 
@@ -41,7 +54,7 @@ const Cart = () => {
         <tbody>
           <tr>
             <td>Subtotal</td>
-            <td>$99.9</td>
+            <td>${subTotal.toFixed(2)}</td>
           </tr>
           <tr>
             <td>Shipping Charge</td>
@@ -49,7 +62,7 @@ const Cart = () => {
           </tr>
           <tr className="cart-bill-total">
             <td>Total</td>
-            <td>$104.9</td>
+            <td>${(subTotal + 5).toFixed(2)}</td>
           </tr>
         </tbody>
       </table>

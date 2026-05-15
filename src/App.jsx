@@ -7,7 +7,7 @@ import Navbar from "./components/Navbar/Navbar";
 import Routing from "./components/Routing/Routing";
 import { getJwt, getUser } from "./services/userServices";
 import setAuthToken from "./utils/setAuthToken";
-import { addToCartAPI } from "./services/cartServices";
+import { addToCartAPI, getCartAPI } from "./services/cartServices";
 
 setAuthToken(getJwt());
 
@@ -50,12 +50,28 @@ const App = () => {
       });
   };
 
+  const getCart = () => {
+    getCartAPI()
+      .then((res) => {
+        setCart(res.data);
+      })
+      .catch((err) => {
+        toast.error("Something went wrong. Please try again.");
+      });
+  };
+
+  useEffect(() => {
+    if (user) {
+      getCart();
+    }
+  }, [user]);
+
   return (
     <div className="app">
       <Navbar user={user} cartCount={cart.length} />
       <main>
-        <ToastContainer />
-        <Routing addToCart={addToCart} />
+        <ToastContainer position="top-center" />
+        <Routing addToCart={addToCart} cart={cart} />
       </main>
     </div>
   );
