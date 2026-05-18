@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import "./Hero.css";
 const Hero = ({ title, subtitle, link, image }) => {
@@ -7,9 +8,9 @@ const Hero = ({ title, subtitle, link, image }) => {
       <div className="align-center">
         <h2 className="title">{title}</h2>
         <p className="subtitle">{subtitle}</p>
-        <a href={link} className="link">
+        <Link to={link} className="link">
           Buy now
-        </a>
+        </Link>
       </div>
       <div className="align-center">
         <img src={image} alt="" />

@@ -11,7 +11,7 @@ const Home = () => {
       <Hero
         title="Buy iPhone 17 Pro Max"
         subtitle="The iPhone 17 Pro Max featuring 48MP triple rear cameras, and a durable aluminum unibody design."
-        link="#"
+        link="/products/6a0ac3bf604133c4c583833e"
         image={iphone}
       />
 
@@ -20,7 +20,7 @@ const Home = () => {
       <Hero
         title="Macbook Air"
         subtitle="MacBook Air is a sleek, lightweight laptop with strong performance and long battery life."
-        link="#"
+        link="/products/69fda3bbb840222bd078732f"
         image={mac}
       />
     </div>
