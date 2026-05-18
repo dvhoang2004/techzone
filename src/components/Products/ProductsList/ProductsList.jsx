@@ -12,16 +12,17 @@ const ProductsList = () => {
   const [page, setPage] = useState(1);
   const category = search.get("category");
   const skeletons = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  const searchQuery = search.get("search");
 
   const { data, error, isLoading } = useData(
     "/products",
-    { params: { category, perPage: 9, page } },
-    [category, page],
+    { params: { search: searchQuery, category, perPage: 9, page } },
+    [search, category, page],
   );
 
   useEffect(() => {
     setPage(1);
-  }, [category]);
+  }, [searchQuery, category]);
 
   // const handlePageChange = () => {
   //   const totalPages = Math.ceil(data?.totalProducts / 9);
