@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useContext, useMemo, memo } from "react";
+import { toast } from "react-toastify";
 
 import "./Cart.css";
 import remove from "../../assets/remove.png";
@@ -7,21 +8,18 @@ import QuantityInput from "../Common/QuantityInput";
 import UserContext from "../../contexts/UserContext";
 import CartContext from "../../contexts/CartContext";
 import { checkoutAPI } from "../../services/orderServices";
-import { toast } from "react-toastify";
-import { set } from "zod";
 
 const Cart = () => {
-  const [subTotal, setSubTotal] = useState(0);
   const user = useContext(UserContext);
   const { cart, removeFromCart, updateCart, setCart } = useContext(CartContext);
 
-  //change in cart will trigger recalculation of subtotal amount
-  useEffect(() => {
+  //calculate subtotal using useMemo to optimize performance by avoiding unnecessary recalculations on every render
+  const subTotal = useMemo(() => {
     let total = 0;
     cart.forEach((item) => {
       total += item.product.price * item.quantity;
     });
-    setSubTotal(total);
+    return total;
   }, [cart]);
 
   const checkout = () => {
@@ -102,4 +100,4 @@ const Cart = () => {
   );
 };
 
-export default Cart;
+export default memo(Cart);

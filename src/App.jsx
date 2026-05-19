@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 
 import "./App.css";
@@ -35,68 +35,77 @@ const App = () => {
     } catch (err) {}
   }, []);
 
-  const addToCart = (product, quantity) => {
-    const updatedCart = [...cart];
-    const productIndex = updatedCart.findIndex(
-      (item) => item.product._id === product._id,
-    );
+  const addToCart = useCallback(
+    (product, quantity) => {
+      const updatedCart = [...cart];
+      const productIndex = updatedCart.findIndex(
+        (item) => item.product._id === product._id,
+      );
 
-    //if product doesn't exist in cart add new entry else update quantity of existing product
-    if (productIndex === -1) {
-      updatedCart.push({ product: product, quantity: quantity });
-    } else updatedCart[productIndex].quantity += quantity;
+      //if product doesn't exist in cart add new entry else update quantity of existing product
+      if (productIndex === -1) {
+        updatedCart.push({ product: product, quantity: quantity });
+      } else updatedCart[productIndex].quantity += quantity;
 
-    setCart(updatedCart);
-
-    addToCartAPI(product._id, quantity)
-      .then((res) => {
-        toast.success("Product added to cart!");
-      })
-      .catch((err) => {
-        toast.error("Failed to add product to cart. Please try again.");
-        setCart(cart); //if error occurs revert back to previous cart state
-      });
-  };
-
-  const removeFromCart = (productId) => {
-    const oldCart = [...cart];
-    const newCart = oldCart.filter((item) => item.product._id !== productId);
-    setCart(newCart);
-
-    removeFromCartAPI(productId)
-      .then(() => {
-        toast.success("Product removed from cart!");
-      })
-      .catch((err) => {
-        toast.error("Failed to remove product from cart. Please try again.");
-        setCart(oldCart); //if error occurs revert back to previous cart state
-      });
-  };
-
-  const updateCart = (type, productId) => {
-    const oldCart = [...cart];
-    const updatedCart = [...cart];
-    const productIndex = updatedCart.findIndex(
-      (item) => item.product._id === productId,
-    );
-    if (type === "increase") {
-      updatedCart[productIndex].quantity += 1;
       setCart(updatedCart);
-      increaseProductAPI(productId).catch((err) => {
-        toast.error("Failed to increase product quantity. Please try again.");
-        setCart(oldCart); //if error occurs revert back to previous cart state
-      });
-    } else if (type === "decrease") {
-      updatedCart[productIndex].quantity -= 1;
-      setCart(updatedCart);
-      decreaseProductAPI(productId).catch((err) => {
-        toast.error("Failed to decrease product quantity. Please try again.");
-        setCart(oldCart); //if error occurs revert back to previous cart state
-      });
-    }
-  };
 
-  const getCart = () => {
+      addToCartAPI(product._id, quantity)
+        .then((res) => {
+          toast.success("Product added to cart!");
+        })
+        .catch((err) => {
+          toast.error("Failed to add product to cart. Please try again.");
+          setCart(cart); //if error occurs revert back to previous cart state
+        });
+    },
+    [cart],
+  );
+
+  const removeFromCart = useCallback(
+    (productId) => {
+      const oldCart = [...cart];
+      const newCart = oldCart.filter((item) => item.product._id !== productId);
+      setCart(newCart);
+
+      removeFromCartAPI(productId)
+        .then(() => {
+          toast.success("Product removed from cart!");
+        })
+        .catch((err) => {
+          toast.error("Failed to remove product from cart. Please try again.");
+          setCart(oldCart); //if error occurs revert back to previous cart state
+        });
+    },
+    [cart],
+  );
+
+  const updateCart = useCallback(
+    (type, productId) => {
+      const oldCart = [...cart];
+      const updatedCart = [...cart];
+      const productIndex = updatedCart.findIndex(
+        (item) => item.product._id === productId,
+      );
+      if (type === "increase") {
+        updatedCart[productIndex].quantity += 1;
+        setCart(updatedCart);
+        increaseProductAPI(productId).catch((err) => {
+          toast.error("Failed to increase product quantity. Please try again.");
+          setCart(oldCart); //if error occurs revert back to previous cart state
+        });
+      } else if (type === "decrease") {
+        updatedCart[productIndex].quantity -= 1;
+        setCart(updatedCart);
+        decreaseProductAPI(productId).catch((err) => {
+          toast.error("Failed to decrease product quantity. Please try again.");
+          setCart(oldCart); //if error occurs revert back to previous cart state
+        });
+      }
+    },
+    [cart],
+  );
+
+  const getCart = useCallback(() => {
     getCartAPI()
       .then((res) => {
         setCart(res.data);
@@ -104,7 +113,7 @@ const App = () => {
       .catch((err) => {
         toast.error("Something went wrong. Please try again.");
       });
-  };
+  }, [user]);
 
   useEffect(() => {
     if (user) {

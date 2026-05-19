@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, memo } from "react";
 import { useParams } from "react-router-dom";
 
 import "./SingleProduct.css";
@@ -69,4 +69,4 @@ const SingleProduct = () => {
   );
 };
 
-export default SingleProduct;
+export default memo(SingleProduct);
